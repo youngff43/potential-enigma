@@ -1,4 +1,12 @@
-# Professional README Generator Starter Code
+# README Generator 
+
+## Description
+This is a node.js application that takes user input from inquirer and creates a README.md file for user repository. The README.me file can be found in the "dist" folder.
+
+## Media
+See screenshots of the completed application along with a video link below.
+
+
 
 [How to create a Professional README](https://coding-boot-camp.github.io/full-stack/github/professional-readme-guide)
 

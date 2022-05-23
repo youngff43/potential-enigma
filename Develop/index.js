@@ -1,14 +1,14 @@
 // TODO: Include packages needed for this application
 const fs = require('fs');
 const inquirer = require('inquirer');
-const generateMarkdown = require('./utils/generateMarkdown');
-const fileName = "./dist/README.md";
+const generateMarkdown = require('./utils/generateMarkdown.js');
+const validator = require('email-validator');
 
 // TODO: Create an array of questions for user input
 const questions = [{
     type: "input",
     name: "title",
-    message: "What is the project title?",
+    message: "What is the project title? (Required)",
     validate: titleInput => {
         if (!titleInput) {
             return console.log("You must enter a project title");
@@ -19,12 +19,19 @@ const questions = [{
 {
     type: "input",
     name: "description",
-    message: "Write a brief decription of your project.",   
+    message: "Write a brief decription of your project. (Required)",
+    validate: descriptionInput => {
+        if (!descriptionInput) {
+            return console.log("You must enter in a description.");
+        }
+        return true;
+    }   
 },
 {
     type: "input",
     name: "installationInstructions",
     message: "Describe the installation process, if any.",
+    default: "npm init",
 },
 {
     type: "input",
@@ -37,12 +44,33 @@ const questions = [{
     message: "Who are the contributors of this project?",
 },
 {
-    type: "input",
-    name: "testInstructions",
+    type: "confirm",
+    name: "testConfirm",
     message: "Are there tests set up for this project?",
+    default: true,
+    validate: testConfirmConfirm => {
+        if (testConfirmConfirm = "y") {
+            return true;
+        } else {
+            return false;
+        }
+    }
 },
 {
-    type: "list",
+    type: "input",
+    name: "testInstructions",
+    message: "Enter in the test instructions.",
+    default: "npm run test",
+    when: ({ testConfirm }) => {
+    if (testConfirm) {
+        return true;
+    } else {
+        return false;
+    }
+}
+},
+{
+    type: "checkbox",
     name: "license",
     message: "Select all of the following licenses for this project.",
     choices: 
@@ -60,10 +88,10 @@ const questions = [{
 {
     type: "input",
     name: "userName",
-    message: "Please provide your Github username.",
+    message: "Please provide your Github username. (Required)",
     validate: userNameInput => {
         if (!userNameInput) {
-            return console.log("You must enter a valid Guthub username.");
+            return console.log("You must enter a valid Github username.");
         }
         return true;
     }
@@ -71,27 +99,29 @@ const questions = [{
 {
     type: "input",
     name: "email",
-    message: "Please provide your email address.",
+    message: "Please provide your email address. (Required)",
     validate: emailInput => {
-        if (!emailInput) {
-            return console.log("You must enter a valid email address.");
+        if (validator.validate(emailInput)) {
+            return true;
         }
-        return true;
+        return console.log("You must enter a valid email address.");
     }
 }];
 
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {
-    fs.writeFile(fileName, data, function (err) {
-        err ? console.log(err) : console.log(filename + " created!")
-    });
+    fs.writeFile(fileName, data, (err) =>
+    err ? console.log(err) : console.log("Your README.md file has been created!")
+    );
 }
 
 // TODO: Create a function to initialize app
 function init() {
-    inquirer.prompt(questions)
-    .then (answers => writeToFile(generateMarkdown(answers)))
-} 
+    const data = inquirer.prompt(questions)
+    .then ((data) => {
+    const fileName = "./dist/README.md";
+    writeToFile(fileName, generateMarkdown(data));
+})}
 
 // Function call to initialize app
 init();
