@@ -8,4 +8,5 @@ See screenshots of the completed application along with a video link below.
 
 ![Screenshot of README.md File](./Develop/src/generated-readme.png)
 
-![Video of Completed Application]()
+![Video of Completed Application](https://user-images.githubusercontent.com/99932948/169922867-5063d5e6-2385-4ef4-87f9-a0ddfd65412b.mp4)
+
